@@ -1,12 +1,14 @@
-export default class Point{
+export default class Vector4 {
     private _x: number
     private _y: number
     private _z: number
+    private _w: number
 
-    constructor(x, y, z) {
-        this._x = x
-        this._y = y
-        this._z = z
+    constructor(x: number, y: number, z: number, w: number) {
+        this._x = x;
+        this._y = y;
+        this._z = z;
+        this._w = w;
     }
 
 
@@ -34,5 +36,16 @@ export default class Point{
         this._z = value;
     }
 
+    get w(): number {
+        return this._w;
+    }
+
+    set w(value: number) {
+        this._w = value;
+    }
+
+    toArray(): number[][] {
+        return [[this._x], [this._y], [this._z], [this._w]];
+    }
 
 }
