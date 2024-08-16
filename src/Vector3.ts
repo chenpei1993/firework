@@ -35,6 +35,10 @@ export default class Vector3 extends Point{
         )
     }
 
+    multiply(v: number): Vector3 {
+        return new Vector3(this.x * v, this.y * v, this.z * v)
+    }
+
     toVector4(): Vector4 {
         return new Vector4(this.x, this.y, this.z, 1);
     }

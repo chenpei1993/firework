@@ -1,10 +1,10 @@
 import ITerm from "./Iterm";
 import Camera from "./Camera";
 import Vector3 from "./Vector3";
+import System from "./System";
 
 export default class Platform implements ITerm{
     private points :Vector3[]
-
 
     constructor(center: Vector3, size: number, interval: number) {
         this.points = []
@@ -16,10 +16,10 @@ export default class Platform implements ITerm{
                     center.z + j * interval));
             }
         }
-        console.log(this.points)
     }
 
     draw(ctx:CanvasRenderingContext2D, camera: Camera): void{
+        ctx.fillStyle = "white"
         for(let i = 0; i < this.points.length; i++){
             ctx.beginPath()
             let point = this.points[i];
@@ -27,14 +27,12 @@ export default class Platform implements ITerm{
             if(!p){
                 continue
             }
-            if(p.y < 300){
-                console.log("------------")
-            }
-            console.log(point)
-            console.log(p.x, p.y)
             ctx.arc(p.x, p.y, 1, 0, 2 * Math.PI);
             ctx.fill()
             ctx.closePath()
         }
+    }
+
+    run(system: System): void {
     }
 }

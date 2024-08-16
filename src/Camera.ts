@@ -11,34 +11,38 @@ export default class Camera {
     private up: Vector3
     private fov: number
     private aspect: number
+    private width: number
+    private height: number
     private far: number
     private near: number
 
 
 
-    constructor(position: Vector3, lookAt: Vector3, fov: number, aspect: number, near: number, far: number) {
+    constructor(position: Vector3, lookAt: Vector3, fov: number, width: number, height: number, near: number, far: number) {
         this.position = position
         this.lookAt = lookAt
         this.up = new Vector3(0, 1, 0)
         this.fov = fov
-        this.aspect = aspect
+        this.aspect = width / height
+        this.width = width
+        this.height = height
         this.near = near
         this.far = far
     }
 
     public transform(point: Vector3) : Vector3 | null{
         let p = point.toVector4()
-        console.log(p)
+        // console.log(p)
         p = this.viewTransform(p)
-        console.log(p)
+        // console.log(p)
         p = this.projectionTransform(p)
         if(p.x > 1 || p.x < -1 || p.y > 1 || p.y < -1 || p.z >= 0 ){
             return null
         }
-        console.log(p)
-        console.log(p.z, this.near, this.far)
+        // console.log(p)
+        // console.log(p.z, this.near, this.far)
         p = this.canvasTransform(p)
-        console.log(p)
+        // console.log(p)
         return new Vector3(p.x.toFixed(2), p.y.toFixed(2), p.z.toFixed(2))
     }
 
@@ -80,8 +84,8 @@ export default class Camera {
             p.y = 0
         }
         // console.log(p)
-        let x = (p.x + 1) * 400
-        let y = 600 - (p.y + 1) * 300
+        let x = (p.x + 1) * this.width / 2
+        let y = this.height - (p.y + 1) * this.height / 2
         return new Vector4(x, y, p.z, p.w)
     }
 
