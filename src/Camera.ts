@@ -32,17 +32,12 @@ export default class Camera {
 
     public transform(point: Vector3) : Vector3 | null{
         let p = point.toVector4()
-        // console.log(p)
         p = this.viewTransform(p)
-        // console.log(p)
         p = this.projectionTransform(p)
         if(p.x > 1 || p.x < -1 || p.y > 1 || p.y < -1 || p.z >= 0 ){
             return null
         }
-        // console.log(p)
-        // console.log(p.z, this.near, this.far)
         p = this.canvasTransform(p)
-        // console.log(p)
         return new Vector3(p.x.toFixed(2), p.y.toFixed(2), p.z.toFixed(2))
     }
 

@@ -28,9 +28,9 @@ export default class Scene {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        // ctx.clearRect(0, 0, this.width, this.height)
+        ctx.clearRect(0, 0, this.width, this.height)
         ctx.rect(0, 0, this.width, this.height)
-        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        ctx.fillStyle = "rgba(0, 0, 0, 1)";
         ctx.fill()
         for(let iterm of this.iterms){
             iterm.draw(ctx, this.camera)

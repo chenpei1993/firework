@@ -2,6 +2,7 @@ import Vector3 from "./Vector3";
 import ITerm from "./Iterm";
 import Camera from "./Camera";
 import System from "./System";
+import LimitArray from "./LimitArray";
 
 export default class Spark implements ITerm{
 
@@ -13,6 +14,7 @@ export default class Spark implements ITerm{
     private liveTime: number
     private color: string
     private live: boolean
+    private trailer: LimitArray<Vector3>
 
     constructor(position: Vector3, direction: Vector3, power: number, color: string) {
         this.position = position
@@ -23,6 +25,8 @@ export default class Spark implements ITerm{
         this.color = color
         this.liveTime = new Date().getTime() + 2000
         this.live = true
+        this.trailer = new LimitArray()
+        this.trailer.push(this.position.clone())
     }
 
     draw(ctx: CanvasRenderingContext2D, camera: Camera): void {
@@ -31,17 +35,24 @@ export default class Spark implements ITerm{
             return
         }
 
-        ctx.fillStyle = this.color
-        ctx.beginPath()
-        let p = camera.transform(this.position)
-        if(!p){
-            this.live = false
-            return
+        let transparent = ["19", "3E", "53", "68", "7D", "92", "A7", "BC", "D1", "FF"]
+        let i = 0;
+        for(let position of this.trailer){
+            if(!position){
+                continue
+            }
+            ctx.beginPath()
+            let p = camera.transform(position)
+            if(!p){
+                this.live = false
+                return
+            }
+            ctx.fillStyle = this.color + transparent[i]
+            ctx.arc(p.x, p.y, 1, 0, 2 * Math.PI);
+            ctx.fill()
+            ctx.closePath()
+            i++
         }
-        ctx.arc(p.x, p.y, 1, 0, 2 * Math.PI);
-        ctx.fill()
-        ctx.closePath()
-
     }
 
     run(system: System): void {
@@ -55,6 +66,7 @@ export default class Spark implements ITerm{
         this.velocity.y = this.velocity.y  - 0.5 * system.g * t
         this.velocity.z = this.velocity.z  - 0.5 * friction * t
         this.time = time
+        this.trailer.push(this.position.clone())
     }
 
     isLive(): boolean{

@@ -4,6 +4,7 @@ import Camera from "./Camera";
 import System from "./System";
 import Spark from "./Spark";
 import * as assert from "node:assert";
+import LimitArray from "./LimitArray";
 
 export default class Firework implements ITerm{
     private position: Vector3
@@ -15,6 +16,7 @@ export default class Firework implements ITerm{
     private live: boolean
     private fireEle: HTMLAudioElement
     private explodeEle: HTMLAudioElement
+    private trailer: LimitArray<Vector3>
 
 
     constructor(position: Vector3,
@@ -33,6 +35,8 @@ export default class Firework implements ITerm{
         this.fireEle.volume = 0.3
         this.explodeEle = explodeEle.cloneNode(true) as HTMLAudioElement
         this.explodeEle.volume = 0.5
+        this.trailer = new LimitArray()
+        this.trailer.push(this.position.clone())
         document.body.appendChild(this.fireEle)
         this.fireEle.play()
         setTimeout(()=>{
@@ -42,7 +46,7 @@ export default class Firework implements ITerm{
 
     private explode(){
         let circlePointCount = 20
-        let radius = 20
+        let radius = 4
 
         let angelStep = Math.PI * 2 / circlePointCount
         for (let i = -radius; i <= radius; i++) {
@@ -74,6 +78,7 @@ export default class Firework implements ITerm{
             this.position.y = this.position.y + this.vy * t - 0.5 * system.g * t * t
             this.vy  = this.vy - system.g * t
             this.time = time
+            this.trailer.push(this.position.clone())
             if(this.vy < 0){
                 this.phase = "exploded"
                 this.explode()
@@ -95,16 +100,24 @@ export default class Firework implements ITerm{
     }
 
     draw(ctx: CanvasRenderingContext2D, camera: Camera): void {
+        let transparent = ["19", "3E", "53", "68", "7D", "92", "A7", "BC", "D1", "FF"]
         if(this.phase == "up"){
-            ctx.beginPath()
-            let p = camera.transform(this.position)
-            if(!p){
-                return
+            let i = 0;
+            for(let position of this.trailer){
+                if(!position){
+                    continue
+                }
+                ctx.beginPath()
+                let p = camera.transform(position)
+                if(!p){
+                    return
+                }
+                ctx.fillStyle = this.color + transparent[i]
+                ctx.arc(p.x, p.y, 1, 0, 2 * Math.PI);
+                ctx.fill()
+                ctx.closePath()
+                i++
             }
-            ctx.fillStyle = this.color
-            ctx.arc(p.x, p.y, 1, 0, 2 * Math.PI);
-            ctx.fill()
-            ctx.closePath()
         }else if(this.phase == "exploded"){
             for(let sparks of this.sparks){
                 sparks.draw(ctx, camera)
