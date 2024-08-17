@@ -3,6 +3,7 @@ import ITerm from "./Iterm";
 import Camera from "./Camera";
 import System from "./System";
 import Spark from "./Spark";
+import * as assert from "node:assert";
 
 export default class Firework implements ITerm{
     private position: Vector3
@@ -28,9 +29,15 @@ export default class Firework implements ITerm{
         this.color = color
         this.sparks = []
         this.live = true
-        this.fireEle = fireEle
-        this.explodeEle = explodeEle
-        // this.fireEle.click()
+        this.fireEle = fireEle.cloneNode(true) as HTMLAudioElement
+        this.fireEle.volume = 0.3
+        this.explodeEle = explodeEle.cloneNode(true) as HTMLAudioElement
+        this.explodeEle.volume = 0.5
+        document.body.appendChild(this.fireEle)
+        this.fireEle.play()
+        setTimeout(()=>{
+            document.body.removeChild(this.fireEle)
+        }, 1000)
     }
 
     private explode(){
@@ -53,6 +60,11 @@ export default class Firework implements ITerm{
                         this.color))
             }
         }
+        document.body.appendChild(this.explodeEle)
+        this.explodeEle.play()
+        setTimeout(()=>{
+            document.body.removeChild(this.explodeEle)
+        }, 1000)
     }
 
     run(system: System) : void {
@@ -65,7 +77,6 @@ export default class Firework implements ITerm{
             if(this.vy < 0){
                 this.phase = "exploded"
                 this.explode()
-                // this.explodeEle.click()
             }
         }else if(this.phase == "exploded"){
             let arr: Spark[] = []

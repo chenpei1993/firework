@@ -67,7 +67,7 @@ let colors = ["#EA0000",
     "#FFE153",
     "#E1E100",
     "#7E3D76"]
-let fireworkGroup = new FireworkGroup(3, colors, 3, 50, 60, -100, -100, 200, 200, - 50, fireEle, explodeEle)
+let fireworkGroup = new FireworkGroup(6, colors, 3, 55, 60, -100, -100, 200, 200, - 50, fireEle, explodeEle)
 scene.add(fireworkGroup)
 
 const animate = () => {
@@ -76,12 +76,9 @@ const animate = () => {
     window.requestAnimationFrame(animate)
 }
 
-// alert("由于浏览器限制，请点击以播放音频")
+alert("由于浏览器限制，请点击以播放音频")
 animate()
 
-window.addEventListener("click", e => {
-    explodeEle.click()
-})
 
 
 

@@ -34,7 +34,7 @@ export default class FireworkGroup implements ITerm {
                 height: number,
                 fireEle: HTMLAudioElement,
                 explodeEle: HTMLAudioElement) {
-        this.size = size
+        this.size = size + 1
         this.colors = colors
         this.interval = interval
         this.fireworks = []
