@@ -16,8 +16,6 @@ export default class Camera {
     private far: number
     private near: number
 
-
-
     constructor(position: Vector3, lookAt: Vector3, fov: number, width: number, height: number, near: number, far: number) {
         this.position = position
         this.lookAt = lookAt
@@ -42,7 +40,7 @@ export default class Camera {
     }
 
 
-    viewTransform(p: Vector4): Vector4{
+    private viewTransform(p: Vector4): Vector4{
         let z0 = this.position.subtract(this.lookAt).normalize()
         let y0 = this.up.clone().normalize()
         let x0 = z0.cross(y0)
@@ -55,7 +53,7 @@ export default class Camera {
         return MatrixHelper.multiplyMatrices(viewMatrix, p.toArray())
     }
 
-    projectionTransform(p: Vector4) {
+    private projectionTransform(p: Vector4) {
         let f = 1.0 / Math.tan(this.fov / 2);
         const rangeInv = 1.0 / (this.near - this.far);
 
@@ -71,7 +69,7 @@ export default class Camera {
 
     }
 
-    canvasTransform(p: Vector4):Vector4 {
+    private canvasTransform(p: Vector4):Vector4 {
         if(p.x == -0){
             p.x = 0
         }
@@ -84,4 +82,26 @@ export default class Camera {
         return new Vector4(x, y, p.z, p.w)
     }
 
+    zoomOut() {
+        if(this.position.z < 500){
+            this.position.z+=10
+        }
+    }
+
+    zoomIn() {
+        if(this.position.z > 150){
+            this.position.z-=10
+        }
+    }
+
+    rotateY(angle: number){
+        let matrix = [
+            [Math.cos(angle), 0, Math.sin(angle), 0],
+            [0, 1, 0, 0],
+            [-Math.sin(angle), 0, Math.cos(angle), 0],
+            [0, 0, 0, 1]
+        ]
+        let v = MatrixHelper.multiplyMatrices(matrix, this.position.toVector4().toArray())
+        this.position = new Vector3(v.x, v.y, v.z)
+    }
 }

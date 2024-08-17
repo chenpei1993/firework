@@ -2,6 +2,7 @@ import ITerm from "./Iterm";
 import Camera from "./Camera";
 import Vector3 from "./Vector3";
 import System from "./System";
+import MatrixHelper from "./MatrixHelper";
 
 export default class Platform implements ITerm{
     private points :Vector3[]
@@ -34,5 +35,18 @@ export default class Platform implements ITerm{
     }
 
     run(system: System): void {
+    }
+
+    rotateY(angle: number) {
+        let matrix = [
+            [Math.cos(angle), 0, Math.sin(angle), 0],
+            [0, 1, 0, 0],
+            [-Math.sin(angle), 0, Math.cos(angle), 0],
+            [0, 0, 0, 1]
+        ]
+        for(let i = 0; i < this.points.length; i++){
+            let v = MatrixHelper.multiplyMatrices(matrix, this.points[i].toVector4().toArray())
+            this.points[i] = new Vector3(v.x, v.y, v.z)
+        }
     }
 }

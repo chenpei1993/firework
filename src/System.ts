@@ -2,6 +2,7 @@ export default class System {
 
     private _g: number
     private _time: number
+    private static _run: boolean = true
 
     constructor(g: number, time: number) {
         this._g = g;
@@ -22,5 +23,14 @@ export default class System {
 
     set time(value: number) {
         this._time = value;
+    }
+
+
+    static get run(): boolean {
+        return this._run;
+    }
+
+    static set run(value: boolean) {
+        this._run = value;
     }
 }

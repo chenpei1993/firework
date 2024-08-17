@@ -50,19 +50,16 @@ export default class FireworkGroup implements ITerm {
         this.explodeEle = explodeEle
     }
 
-    private fill(){
+    public fill(){
         if(this.num < this.size){
             this.num++
-            let time = Math.ceil(this.interval * Math.random()) * 1000
-            setTimeout(() => {
-                let color = this.colors[Math.floor(Math.random() * this.colors.length)]
-                let position = new Vector3(
-                    this.x + this.w * Math.random(),
-                    this.height,
-                    this.z + this.h * Math.random())
-                let vy = (this.maxVy - this.minVy) * Math.random() + this.minVy
-                this.fireworks.push(new Firework(position, vy, color, this.fireEle, this.explodeEle))
-            }, time)
+            let color = this.colors[Math.floor(Math.random() * this.colors.length)]
+            let position = new Vector3(
+                this.x + this.w * Math.random(),
+                this.height,
+                this.z + this.h * Math.random())
+            let vy = (this.maxVy - this.minVy) * Math.random() + this.minVy
+            this.fireworks.push(new Firework(position, vy, color, this.fireEle, this.explodeEle))
         }
     }
 
@@ -83,8 +80,6 @@ export default class FireworkGroup implements ITerm {
             }
         }
         this.fireworks = arr
-        this.fill()
-
     }
 
 

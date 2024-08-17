@@ -23,7 +23,7 @@ export default class Spark implements ITerm{
         this.velocity = this.direction.multiply(power)
         this.time = new Date().getTime()
         this.color = color
-        this.liveTime = new Date().getTime() + 2000
+        this.liveTime = new Date().getTime() + 1000
         this.live = true
         this.trailer = new LimitArray()
         this.trailer.push(this.position.clone())

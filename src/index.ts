@@ -2,11 +2,7 @@ import Platform from "./Platform";
 import Scene from "./Scene";
 import Camera from "./Camera";
 import Vector3 from "./Vector3";
-import Point from "./Point";
-import Sphere from "./Sphere";
 import System from "./System";
-import Firework from "./Firework";
-import * as domain from "node:domain";
 import FireworkGroup from "./FireworkGroup";
 
 
@@ -32,11 +28,11 @@ if(!ctx){
     throw new Error("ctx not found");
 }
 
-let camera = new Camera(new Vector3(0, 0, 250), new Vector3(0, 150, 0), 45, canvas.width, canvas.height, 1, 1000);
+let camera = new Camera(new Vector3(0, 0, 300), new Vector3(0, 150, 0), 45, canvas.width, canvas.height, 1, 1000);
 let scene = new Scene(camera, canvas.width, canvas.height)
 
 
-let platform = new Platform(new Vector3(0, -50, 0), 50, 10)
+let platform = new Platform(new Vector3(0, -50, 0), 20, 10)
 scene.add(platform)
 
 // let sphere = new Sphere(new Vector3(0, 150, 0))
@@ -59,17 +55,52 @@ let colors = ["#EA0000",
     "#FFE153",
     "#E1E100",
     "#7E3D76"]
-let fireworkGroup = new FireworkGroup(6, colors, 3, 40, 45, -100, -100, 200, 200, 0, fireEle, explodeEle)
+let fireworkGroup = new FireworkGroup(4, colors, 3, 40, 45, -50, -50, 100, 100, 0, fireEle, explodeEle)
 scene.add(fireworkGroup)
 
+let cameraStep = 0.3 / 180 * Math.PI
+let step = 0.2 / 180 * Math.PI
 const animate = () => {
-    scene.run(system)
-    scene.draw(ctx)
-    window.requestAnimationFrame(animate)
+    try{
+        camera.rotateY(cameraStep)
+        platform.rotateY(step)
+        scene.run(system)
+        scene.draw(ctx)
+    }catch (e){
+        console.error(e)
+    }finally {
+        window.requestAnimationFrame(animate)
+    }
 }
 
-alert("由于浏览器限制，请点击以播放音频")
+
 animate()
+
+
+let startBtn = document.getElementById("confirmButton")
+let modal = document.getElementById("myModal");
+if(startBtn && modal){
+    startBtn.addEventListener('click', (event) => {
+        modal.style.display = "none"
+    })
+}
+
+wrapper.addEventListener("click", (event) => {
+    fireworkGroup.fill()
+})
+
+wrapper.addEventListener('wheel', (event) => {
+    event.preventDefault(); // 防止默认的滚动行为
+
+    if (event.deltaY > 0) {
+        // 向下滚动，缩小
+        camera.zoomOut()
+    } else {
+        // 向上滚动，放大
+        camera.zoomIn()
+    }
+})
+
 
 
 

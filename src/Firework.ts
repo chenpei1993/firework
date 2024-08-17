@@ -38,7 +38,9 @@ export default class Firework implements ITerm{
         this.trailer = new LimitArray()
         this.trailer.push(this.position.clone())
         document.body.appendChild(this.fireEle)
-        this.fireEle.play()
+        this.fireEle.play().catch((e) => {
+            console.log(e)
+        })
         setTimeout(()=>{
             document.body.removeChild(this.fireEle)
         }, 1000)
@@ -46,7 +48,7 @@ export default class Firework implements ITerm{
 
     private explode(){
         let circlePointCount = 20
-        let radius = 4
+        let radius = 8
 
         let angelStep = Math.PI * 2 / circlePointCount
         for (let i = -radius; i <= radius; i++) {
@@ -65,7 +67,9 @@ export default class Firework implements ITerm{
             }
         }
         document.body.appendChild(this.explodeEle)
-        this.explodeEle.play()
+        this.explodeEle.play().catch((e) => {
+            console.log(e)
+        })
         setTimeout(()=>{
             document.body.removeChild(this.explodeEle)
         }, 1000)
@@ -79,7 +83,7 @@ export default class Firework implements ITerm{
             this.vy  = this.vy - system.g * t
             this.time = time
             this.trailer.push(this.position.clone())
-            if(this.vy < 0){
+            if(this.vy <= 10){
                 this.phase = "exploded"
                 this.explode()
             }

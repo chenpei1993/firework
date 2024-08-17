@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>烟花</title>
     <style>
-        html body{
+        html, body{
             padding: 0;
             margin: 0;
             width: 100%;
@@ -16,11 +16,75 @@
             -ms-user-select: none;      /* Internet Explorer/Edge */
             user-select: none;          /* 标准语法 */
         }
+        .modal {
+            display: block;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #45a049;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: center;">
-        <div id = "wrapper" style="min-width: 100vw; min-height: 100vh;"></div>
+    <div id = "wrapper" style="width: 100%; height: 100%"></div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>烟花Show</h2>
+            <p><b>点击屏幕，即可添加一个烟花。</b>最多同时4朵烟花</p>
+            <div class="modal-buttons">
+                <button id="confirmButton">开始</button>
+            </div>
+        </div>
     </div>
     <audio id="fire" src="fire.mp3" type="audio/mpeg"></audio>
     <audio id="explode"  src="explode.mp3"  type="audio/mpeg"></audio>
