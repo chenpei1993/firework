@@ -1,6 +1,7 @@
 const path = require("path")
 const HTMLWebpackPlugin = require("html-webpack-plugin")
-const TerserPlugin = require('terser-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin')
+const WebpackObfuscator = require('webpack-obfuscator')
 
 module.exports = {
     entry: './src/index.ts',
@@ -29,7 +30,13 @@ module.exports = {
             {
                 template: "./src/index.html"
             }
-        )
+        ),
+        new WebpackObfuscator({
+            rotateUnicodeArray: true, // 打乱Unicode数组顺序
+            deadCodeInjection: true,
+            // 死代码块的影响概率
+            deadCodeInjectionThreshold: 0.4
+        })
     ],
     optimization: {
         minimizer: [
