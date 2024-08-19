@@ -28,7 +28,7 @@ if(!ctx){
     throw new Error("ctx not found");
 }
 
-let camera = new Camera(new Vector3(0, 0, 300), new Vector3(0, 150, 0), 45, canvas.width, canvas.height, 1, 1000);
+let camera = new Camera(new Vector3(0, 0, 300), new Vector3(0, 200, 0), 45, canvas.width, canvas.height, 1, 1000);
 let scene = new Scene(camera, canvas.width, canvas.height)
 
 
@@ -55,7 +55,7 @@ let colors = ["#EA0000",
     "#FFE153",
     "#E1E100",
     "#7E3D76"]
-let fireworkGroup = new FireworkGroup(4, colors, 3, 40, 45, -50, -50, 100, 100, 0, fireEle, explodeEle)
+let fireworkGroup = new FireworkGroup(4, colors, 3, 60, 65, -50, -50, 100, 100, -50, fireEle, explodeEle)
 scene.add(fireworkGroup)
 
 let cameraStep = 0.3 / 180 * Math.PI
